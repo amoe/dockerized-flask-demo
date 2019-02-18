@@ -3,7 +3,8 @@ services:
     build: .
     image: docker_bind_volume_demo
     mem_limit: 4g
-    ports: ['49152']
+    ports:
+      - "5000:5000"
     volumes:
       - ./code:/code:ro
 
