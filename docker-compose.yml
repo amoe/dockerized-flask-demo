@@ -1,0 +1,10 @@
+services:
+  web:
+    build: .
+    image: docker_bind_volume_demo
+    mem_limit: 4g
+    ports: ['49152']
+    volumes:
+      - ./code:/code:ro
+
+version: '2'
