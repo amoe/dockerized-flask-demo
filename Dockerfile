@@ -8,6 +8,8 @@ RUN pip3 install -r requirements.txt
 
 WORKDIR /code
 
+VOLUME ["/data"]
+
 # Flask specific.  We will want to change these run modes for production vs
 # development.
 ENV LANG=C.UTF-8
