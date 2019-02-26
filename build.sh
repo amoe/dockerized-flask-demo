@@ -1,35 +1,40 @@
-docker build -t docker_bind_volume_demo .
+# Imagine our service is called myannotator
+docker build -t myannotator_image .
 
-# create container with auto generated name
-docker create docker_bind_volume_demo
+# Create container with specific name
+# Source path has to be absolute
+docker create --name myannotator_container \
+  --mount type=bind,source=$(pwd)/code,destination=/code,readonly \
+  myannotator_image
 
-# start it
-docker start 
+# List containers to show it was created
+docker ps -a
 
-# log in to it
-docker exec -it dockerbindvolumedemo_web_1 /bin/sh
+# start it, attached
+docker start -a myannotator_container
+
+# log in to it (from another terminal)
+docker exec -it myannotator_container /bin/sh
+
+# Inspect it.
+docker inspect myannotator_container
+
+#/dev/sda5 on /code type ext4 (ro,relatime,errors=remount-ro,data=ordered)
+
 
 # This will return
 
-        "Mounts": [
-            {
-                "Type": "volume",
-                "Name": "67762a9623220ac1ef19550a55984c8ea5b31f234c3829adf2a19f805659ba7b",
-                "Source": "/var/lib/docker/volumes/67762a9623220ac1ef19550a55984c8ea5b31f234c3829adf2a19f805659ba7b/_data",
-                "Destination": "/data",
-                "Driver": "local",
-                "Mode": "",
-                "RW": true,
-                "Propagation": ""
-            }
+        # "Mounts": [
+        #     {
+        #         "Type": "bind",
+        #         "Source": "/home/amoe/dev/docker-bind-volume-demo/code",
+        #         "Destination": "/data",
+        #         "Mode": "",
+        #         "RW": false,
+        #         "Propagation": "rprivate"
+        #     }
 
+# Now make a change in app.py.
+#  * Detected change in '/code/app.py', reloading
 
-# SO destination maps a thing
-
-docker volume 
-
-docker run -d \
-  --name=nginxtest \
-  --mount source=nginx-vol,destination=/usr/share/nginx/html,readonly \
-  nginx:latest
-
+# Now you only need to rebuild if you change the infrastructure definitions.

@@ -10,4 +10,4 @@ app = create_app()
 
 @app.route("/hello", methods=['GET'])
 def hello():
-    return flask.jsonify({})
+    return flask.jsonify({"foo": 43})
